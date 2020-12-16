@@ -1,0 +1,35 @@
+#!/bin/bash
+
+if [ -d "inputs" ]; then
+   rm -rf inputs
+fi
+
+if [ -d "expected" ]; then
+   rm -rf expected
+fi
+
+mkdir inputs
+mkdir expected
+
+cd inputs
+../gen_inputs
+cd ..
+
+mkdir outputs
+
+for file in inputs/*; do
+   echo "Generating for ${file}"
+
+   BASE=`basename ${file}`
+
+    cd inputs
+    ~pn-cs357/demos/mytar cvf "../expected/${BASE}.tar" "${BASE}" > "../expected/${BASE}_cv.log" 2>&1
+    cd ..
+    ~pn-cs357/demos/mytar tf "expected/${BASE}.tar" > "expected/${BASE}_t.log" 2>&1
+    ~pn-cs357/demos/mytar tvf "expected/${BASE}.tar" > "expected/${BASE}_tv.log" 2>&1
+
+    cd outputs
+    ~pn-cs357/demos/mytar xvf "../expected/${BASE}.tar" > "../expected/${BASE}_xv.log" 2>&1
+    cd ..
+done
+rm -rf outputs
