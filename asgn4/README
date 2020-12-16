@@ -1,5 +1,0 @@
-Parth Ray (pray)
-
-Compile: make
-
-Usage: mytar [ctxvS]f tarfile [ path [ ... ] ]
